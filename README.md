@@ -15,7 +15,11 @@ Just call `require("code-shot").shot()`, work in both `n` and `v` mode.
 
 - Shot whole file
 
+<img src="https://github.com/niuiic/assets/blob/main/code-shot.nvim/shot-whole.gif" />
+
 - Shot selection
+
+<img src="https://github.com/niuiic/assets/blob/main/code-shot.nvim/shot-range.gif" />
 
 ## Config
 
