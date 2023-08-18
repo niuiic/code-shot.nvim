@@ -5,9 +5,12 @@ local utils = require("code-shot.utils")
 local shot = function()
 	local source_file = vim.api.nvim_buf_get_name(0)
 	local use_temp_source = false
+	---@type {s_start: {row: number, col: number}, s_end: {row: number, col: number}} | nil
+	local select_area
 
 	if vim.fn.mode() == "v" then
 		use_temp_source = true
+		select_area = core.text.selected_area()
 		source_file = utils.temp_file_path(source_file)
 		local lines = core.lua.string.split(core.text.selection(), "\n")
 		vim.fn.writefile(lines, source_file)
@@ -21,7 +24,7 @@ local shot = function()
 	local err = false
 	local args = {}
 
-	core.lua.list.each(static.config.options(), function(option)
+	core.lua.list.each(static.config.options(select_area), function(option)
 		table.insert(args, option)
 	end)
 
