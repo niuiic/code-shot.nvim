@@ -8,7 +8,7 @@ local shot = function()
 	---@type {s_start: {row: number, col: number}, s_end: {row: number, col: number}} | nil
 	local select_area
 
-	if vim.fn.mode() == "v" then
+	if vim.fn.mode() == "v" or vim.fn.mode() == "V" then
 		use_temp_source = true
 		select_area = core.text.selected_area()
 		source_file = utils.temp_file_path(source_file)
