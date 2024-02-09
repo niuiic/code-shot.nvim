@@ -3,16 +3,23 @@ local core = require("core")
 local utils = require("code-shot.utils")
 
 local shot = function()
+	if vim.fn.executable("silicon") == 0 then
+		vim.notify("silicon is not found", vim.log.levels.ERROR, {
+			title = "Code Shot",
+		})
+		return
+	end
+
 	local source_file = vim.api.nvim_buf_get_name(0)
 	local use_temp_source = false
 	---@type {s_start: {row: number, col: number}, s_end: {row: number, col: number}} | nil
 	local select_area
 
-	if vim.fn.mode() == "v" then
+	if vim.fn.mode() == "v" or vim.fn.mode() == "V" then
 		use_temp_source = true
-		select_area = core.text.selected_area()
+		select_area = utils.selected_area()
 		source_file = utils.temp_file_path(source_file)
-		local lines = core.lua.string.split(core.text.selection(), "\n")
+		local lines = vim.api.nvim_buf_get_lines(0, select_area.start_line - 1, select_area.end_line, false)
 		vim.fn.writefile(lines, source_file)
 	elseif not core.file.file_or_dir_exists(source_file) then
 		use_temp_source = true
@@ -20,6 +27,8 @@ local shot = function()
 		local lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
 		vim.fn.writefile(lines, source_file)
 	end
+
+	core.text.cancel_selection()
 
 	local err = false
 	local args = {}
@@ -45,7 +54,7 @@ local shot = function()
 			})
 		end
 		if use_temp_source then
-			vim.uv.fs_unlink(source_file)
+			vim.loop.fs_unlink(source_file)
 		end
 	end, function(_, data)
 		err = true

@@ -16,6 +16,22 @@ local temp_file_path = function(source_file)
 	return temp_file
 end
 
+local selected_area = function()
+	if vim.fn.mode() == "n" then
+		local pos = vim.api.nvim_win_get_cursor(0)
+		return {
+			pos[1],
+			pos[1],
+		}
+	end
+
+	return {
+		start_line = vim.fn.getpos("v")[2],
+		end_line = vim.fn.getpos(".")[2],
+	}
+end
+
 return {
 	temp_file_path = temp_file_path,
+	selected_area = selected_area,
 }

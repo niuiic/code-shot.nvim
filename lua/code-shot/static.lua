@@ -10,7 +10,7 @@ local config = {
 		end
 		return {
 			"--line-offset",
-			select_area.s_start.row,
+			select_area.start_line,
 		}
 	end,
 }

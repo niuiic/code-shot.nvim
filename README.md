@@ -11,7 +11,7 @@ Similar features to [silicon.nvim](https://github.com/krivahtoo/silicon.nvim), k
 
 ## Usage
 
-Just call `require("code-shot").shot()`, work in both `n` and `v` mode.
+Just call `require("code-shot").shot()`, work in both `n`, `v` and `V` mode.
 
 - Shot whole file
 
@@ -34,14 +34,14 @@ require("code-shot").setup({
 		return core.file.name(buf_name) .. ".png"
 	end,
 	---@return string[]
-	-- select_area: {s_start: {row: number, col: number}, s_end: {row: number, col: number}} | nil
+	-- select_area: {start_line: number, end_line: number} | nil
 	options = function(select_area)
 		if not select_area then
 			return {}
 		end
 		return {
 			"--line-offset",
-			select_area.s_start.row,
+			select_area.start_line,
 		}
 	end,
 })
