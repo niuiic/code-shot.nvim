@@ -25,9 +25,16 @@ local selected_area = function()
 		}
 	end
 
+	local start_line = vim.fn.getpos("v")[2]
+	local end_line = vim.fn.getpos(".")[2]
+
+	if start_line > end_line then
+		start_line, end_line = end_line, start_line
+	end
+
 	return {
-		start_line = vim.fn.getpos("v")[2],
-		end_line = vim.fn.getpos(".")[2],
+		start_line = start_line,
+		end_line = end_line,
 	}
 end
 
