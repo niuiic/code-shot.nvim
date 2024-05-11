@@ -4,6 +4,8 @@ Take a picture of the code.
 
 Similar features to [silicon.nvim](https://github.com/krivahtoo/silicon.nvim), keep simple, keep reliable.
 
+[More neovim plugins](https://github.com/niuiic/awesome-neovim-plugins)
+
 ## Dependencies
 
 - [silicon](https://github.com/Aloxaf/silicon)
