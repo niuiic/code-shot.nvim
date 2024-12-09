@@ -25,7 +25,7 @@ Similar features to [silicon.nvim](https://github.com/krivahtoo/silicon.nvim), k
 
 ## Usage
 
-- shot file to clipboard
+- types
 
 ```lua
 ---@class code-shot.Context
@@ -33,6 +33,17 @@ Similar features to [silicon.nvim](https://github.com/krivahtoo/silicon.nvim), k
 ---@field file_type string
 ---@field selected_area omega.Area
 ---@field selection string
+
+---@class omega.Area
+---@field start_lnum number
+---@field start_col number
+---@field end_lnum number
+---@field end_col number
+```
+
+- shot file to clipboard
+
+```lua
 local function shot_file_to_clipboard()
 	require("code-shot").shot(function(context)
 		vim.system(
