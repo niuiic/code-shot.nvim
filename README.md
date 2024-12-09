@@ -1,5 +1,7 @@
 # code-shot.nvim
 
+**_To use version v1.0.0, set branch to v1._**
+
 Take a picture of the code.
 
 Similar features to [silicon.nvim](https://github.com/krivahtoo/silicon.nvim), keep simple, keep reliable.
@@ -32,15 +34,6 @@ local function shot_file_to_clipboard()
 			{
 				"silicon",
 				"--to-clipboard",
-				"--pad-horiz",
-				"0",
-				"--pad-vert",
-				"0",
-				"--no-round-corner",
-				"--theme",
-				"Coldark-Dark",
-				"--no-line-number",
-				"--no-window-controls",
 				context.file_path,
 			},
 			nil,
@@ -56,6 +49,32 @@ local function shot_file_to_clipboard()
 end
 ```
 
+- shot file to file
+
+```lua
+local function shot_file_to_file()
+	require("code-shot").shot(function(context)
+		vim.system(
+			{
+				"silicon",
+				"-o",
+				string.format("%s.png", os.date("%Y-%m-%d_%H:%M:%S")),
+				context.file_path,
+			},
+			nil,
+			function(result)
+				if result.code == 0 then
+					vim.notify("Shot code successfully", vim.log.levels.INFO)
+				else
+					vim.notify("Shot code failed", vim.log.levels.ERROR)
+				end
+			end
+		)
+	end)
+end
+
+```
+
 - shot selection to clipboard
 
 ```lua
@@ -65,15 +84,38 @@ local function shot_selection_to_clipboard()
 			{
 				"silicon",
 				"--to-clipboard",
-				"--pad-horiz",
-				"0",
-				"--pad-vert",
-				"0",
-				"--no-round-corner",
-				"--theme",
-				"Coldark-Dark",
-				"--no-line-number",
-				"--no-window-controls",
+				context.file_path,
+			},
+			nil,
+			function(result)
+				if result.code == 0 then
+					vim.notify("Shot code successfully", vim.log.levels.INFO)
+				else
+					vim.notify("Shot code failed", vim.log.levels.ERROR)
+				end
+			end
+		)
+	end)
+end
+```
+
+- shot selection to file
+
+```lua
+local shot_selection_to_file = function()
+	require("code-shot").shot(function(context)
+		require("omega").to_normal_mode()
+
+		vim.fn.setreg("+", context.selection)
+
+		vim.system(
+			{
+				"silicon",
+				"-o",
+				string.format("%s.png", os.date("%Y-%m-%d_%H:%M:%S")),
+				"--from-clipboard",
+				"--language",
+				context.file_type,
 				context.file_path,
 			},
 			nil,
