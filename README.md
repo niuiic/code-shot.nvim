@@ -28,6 +28,11 @@ Similar features to [silicon.nvim](https://github.com/krivahtoo/silicon.nvim), k
 - shot file to clipboard
 
 ```lua
+---@class code-shot.Context
+---@field file_path string
+---@field file_type string
+---@field selected_area omega.Area
+---@field selection string
 local function shot_file_to_clipboard()
 	require("code-shot").shot(function(context)
 		vim.system(
