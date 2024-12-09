@@ -9,11 +9,9 @@ Similar features to [silicon.nvim](https://github.com/krivahtoo/silicon.nvim), k
 ## Dependencies
 
 - [silicon](https://github.com/Aloxaf/silicon)
-- [niuiic/core.nvim](https://github.com/niuiic/core.nvim)
+- [niuiic/omega.nvim](https://github.com/niuiic/omega.nvim)
 
-## Usage
-
-Just call `require("code-shot").shot()`, work in both `n`, `v` and `V` mode.
+## Showcase
 
 - Shot whole file
 
@@ -23,41 +21,70 @@ Just call `require("code-shot").shot()`, work in both `n`, `v` and `V` mode.
 
 <img src="https://github.com/niuiic/assets/blob/main/code-shot.nvim/shot-range.gif" />
 
-## Config
+## Usage
 
-Default config here.
+- shot file to clipboard
 
 ```lua
-require("code-shot").setup({
-	---@return string output file path
-	output = function()
-		local core = require("core")
-		local buf_name = vim.api.nvim_buf_get_name(0)
-		return core.file.name(buf_name) .. ".png"
-	end,
-	---@return string[]
-	-- select_area: {start_line: number, end_line: number} | nil
-	options = function(select_area)
-		if not select_area then
-			return {}
-		end
-		return {
-			"--line-offset",
-			select_area.start_line,
-		}
-	end,
-})
+local function shot_file_to_clipboard()
+	require("code-shot").shot(function(context)
+		vim.system(
+			{
+				"silicon",
+				"--to-clipboard",
+				"--pad-horiz",
+				"0",
+				"--pad-vert",
+				"0",
+				"--no-round-corner",
+				"--theme",
+				"Coldark-Dark",
+				"--no-line-number",
+				"--no-window-controls",
+				context.file_path,
+			},
+			nil,
+			function(result)
+				if result.code == 0 then
+					vim.notify("Shot code successfully", vim.log.levels.INFO)
+				else
+					vim.notify("Shot code failed", vim.log.levels.ERROR)
+				end
+			end
+		)
+	end)
+end
 ```
 
-Add any argument supported by silicon in `options`. For example, select a theme.
+- shot selection to clipboard
 
 ```lua
-require("code-shot").setup({
-	options = function()
-		return {
-			"--theme",
-			"DarkNeon",
-		}
-	end,
-})
+local function shot_selection_to_clipboard()
+	require("code-shot").shot(function(context)
+		vim.system(
+			{
+				"silicon",
+				"--to-clipboard",
+				"--pad-horiz",
+				"0",
+				"--pad-vert",
+				"0",
+				"--no-round-corner",
+				"--theme",
+				"Coldark-Dark",
+				"--no-line-number",
+				"--no-window-controls",
+				context.file_path,
+			},
+			nil,
+			function(result)
+				if result.code == 0 then
+					vim.notify("Shot code successfully", vim.log.levels.INFO)
+				else
+					vim.notify("Shot code failed", vim.log.levels.ERROR)
+				end
+			end
+		)
+	end)
+end
 ```
