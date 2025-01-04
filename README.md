@@ -96,21 +96,18 @@ end
 ```lua
 local function shot_selection_to_clipboard()
 	require("code-shot").shot(function(context)
-		vim.system(
-			{
-				"silicon",
-				"--to-clipboard",
-				context.file_path,
-			},
-			nil,
-			function(result)
-				if result.code == 0 then
-					vim.notify("Shot code successfully", vim.log.levels.INFO)
-				else
-					vim.notify("Shot code failed", vim.log.levels.ERROR)
-				end
+		vim.system({
+			"silicon",
+			"--to-clipboard",
+			"--language",
+			context.file_type,
+		}, { stdin = context.selection }, function(result)
+			if result.code == 0 then
+				vim.notify("Shot code successfully", vim.log.levels.INFO)
+			else
+				vim.notify("Shot code failed", vim.log.levels.ERROR)
 			end
-		)
+		end)
 	end)
 end
 ```
@@ -122,27 +119,21 @@ local shot_selection_to_file = function()
 	require("code-shot").shot(function(context)
 		require("omega").to_normal_mode()
 
-		vim.fn.setreg("+", context.selection)
-
-		vim.system(
-			{
-				"silicon",
-				"-o",
-				string.format("%s.png", os.date("%Y-%m-%d_%H:%M:%S")),
-				"--from-clipboard",
-				"--language",
-				context.file_type,
-				context.file_path,
-			},
-			nil,
-			function(result)
-				if result.code == 0 then
-					vim.notify("Shot code successfully", vim.log.levels.INFO)
-				else
-					vim.notify("Shot code failed", vim.log.levels.ERROR)
-				end
+		vim.system({
+			"silicon",
+			"-o",
+			string.format("%s.png", os.date("%Y-%m-%d_%H:%M:%S")),
+			"--language",
+			context.file_type,
+		}, {
+			stdin = context.selection,
+		}, function(result)
+			if result.code == 0 then
+				vim.notify("Shot code successfully", vim.log.levels.INFO)
+			else
+				vim.notify("Shot code failed", vim.log.levels.ERROR)
 			end
-		)
+		end)
 	end)
 end
 ```
